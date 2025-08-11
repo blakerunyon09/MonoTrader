@@ -1,0 +1,2 @@
+# MonoTrader
+Stock Prediction App
