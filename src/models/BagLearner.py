@@ -17,7 +17,6 @@ class BagLearner:
     for _ in range(self.bags):
         _i = np.random.randint(0, data_x.shape[0], size=data_x.shape[0])
 
-        # Build the trees
         tree = self.learner(**self.kwargs)
         tree.add_evidence(data_x[_i], data_y[_i], self.mode)
         self.trees.append(tree)
