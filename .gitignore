@@ -1,0 +1,5 @@
+.venv/
+settings.json
+*.pyc
+__pycache__/
+assets/

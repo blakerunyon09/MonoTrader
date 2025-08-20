@@ -186,40 +186,40 @@ def run():
     _, t_in_order_book = testPolicy(symbol=symbol, sd=dt.datetime(2023, 1, 1), ed=dt.datetime(2024, 12, 31), return_order_book=True)
     _, t_out_order_book = testPolicy(symbol=symbol, sd=dt.datetime(2025, 1, 1), ed=dt.datetime(2025, 8, 1), return_order_book=True)
 
+    print(t_in_order_book)
+
     in_gini_portvalue, in_gini_cumulative_return = get_cumulative_return(t_in_order_book)
     out_gini_portvalue, out_gini_cumulative_return = get_cumulative_return(t_out_order_book)
 
-    plt.figure()
-    plt.title(f"In Sample Portfolio Value {symbol}")
+    # plt.figure()
+    # plt.title(f"In Sample Portfolio Value {symbol}")
 
-    plt.xlabel("Date")
-    plt.ylabel("Normalized Portfolio Value")
+    # plt.xlabel("Date")
+    # plt.ylabel("Normalized Portfolio Value")
 
-    plt.plot(in_gini_portvalue.index, in_gini_portvalue, label="Gini Learner", color='blue')
+    # plt.plot(in_gini_portvalue.index, in_gini_portvalue, label="Gini Learner", color='blue')
 
-    plt.legend()
-    plt.grid(True)
-    plt.savefig("assets/In_Sample_Portfolio.png")
-    plt.close()
+    # plt.legend()
+    # plt.grid(True)
+    # plt.savefig("assets/In_Sample_Portfolio.png")
+    # plt.close()
 
-    plt.figure()
-    plt.title(f"Out of Sample Portfolio Value {symbol}")
+    # plt.figure()
+    # plt.title(f"Out of Sample Portfolio Value {symbol}")
 
-    plt.xlabel("Date")
-    plt.ylabel("Normalized Portfolio Value")
+    # plt.xlabel("Date")
+    # plt.ylabel("Normalized Portfolio Value")
 
-    plt.plot(out_gini_portvalue.index, out_gini_portvalue, label="Gini Learner", color='blue')
+    # plt.plot(out_gini_portvalue.index, out_gini_portvalue, label="Gini Learner", color='blue')
 
-    plt.legend()
-    plt.grid(True)
-    plt.savefig("assets/Out_of_Sample_Portfolio.png")
-    plt.close()
+    # plt.legend()
+    # plt.grid(True)
+    # plt.savefig("assets/Out_of_Sample_Portfolio.png")
+    # plt.close()
 
-    print(
-        f"In Sample Gini Cumulative Return: {in_gini_cumulative_return:.6f}, \n"
-        f"Out of Sample Gini Cumulative Return: {out_gini_cumulative_return:.6f}, \n"
-    )
-
-    return
+    # print(
+    #     f"In Sample Gini Cumulative Return: {in_gini_cumulative_return:.6f}, \n"
+    #     f"Out of Sample Gini Cumulative Return: {out_gini_cumulative_return:.6f}, \n"
+    # )
 
 run()
