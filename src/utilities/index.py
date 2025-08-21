@@ -3,7 +3,7 @@ import os
 
 def symbol_to_path(symbol, base_dir=None):  		  	   		 	 	 			  		 			 	 	 		 		 		  	   		 	 	 			  		 			 	 	 		 		 	
     if base_dir is None:  		  	   		 	 	 			  		 			 	 	 		 		 	
-        base_dir = os.environ.get("MARKET_DATA_DIR", "./data/")  		  	   		 	 	 			  		 			 	 	 		 		 	
+        base_dir = os.environ.get("MARKET_DATA_DIR", "data")  		  	   		 	 	 			  		 			 	 	 		 		 	
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))  		  	   		 	 	 			  		 			 	 	 		 		 	
 
 def get_data(symbol, dates, colname="Close"):  		  	   		 	 	 			  		 			 	 	 		 		 	 		  	   		 	 	 			  		 			 	 	 		 		 	
@@ -11,13 +11,12 @@ def get_data(symbol, dates, colname="Close"):
 
     df_temp = pd.read_csv(
         symbol_to_path(symbol),
-        index_col="Date",
+        index_col=0,
         parse_dates=True,
-        usecols=["Date", colname],
         na_values=["nan"],
-        names=["Date", "Open", "High", "Low", "Close", "Volume"],
-        skiprows=3,
     )
+    df_temp.index.name = "Date"
+
     df_temp = df_temp.rename(columns={colname: symbol})
     df = df.join(df_temp)
 
