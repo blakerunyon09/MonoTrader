@@ -22,7 +22,7 @@ def add_evidence(
     ed=dt.datetime(2024, 1, 1),  		  	   		 	 	 			  		 			 	 	 		 		 	
     sv=10000,  		  
     future_window=5,
-    threshold=0.005,	   		  		 			 	 	 		 		 	
+    threshold=0,	   		  		 			 	 	 		 		 	
 ):  		  	   		 	 	 			  		 			 	 	 		 		 	  	  
     backfilled_prices = ut.get_data(symbol, pd.date_range(sd - dt.timedelta(days=200), ed))[symbol]
     daily_prices = ut.get_data(symbol, pd.date_range(sd, ed))[symbol]
@@ -37,11 +37,10 @@ def add_evidence(
     x = np.column_stack((bbp_signals, rsi_signals, roc_signals, macd_signals, so_signals))
     y = np.zeros(len(daily_prices))
 
-    net_return = ((daily_prices.shift(-future_window).values * (1))/ (daily_prices.values  * (1)) - 1) \
-    - ((2) / (1000 * daily_prices.values * (1)))
+    net_return = (daily_prices.shift(-future_window).values / daily_prices.values) - 1
 
-    y[net_return >  threshold] =  1
-    y[net_return < -threshold] = -1
+    y[net_return >  0] =  1
+    y[net_return < -0] = -1
 
     learner.add_evidence(x, y)		
 
@@ -111,7 +110,10 @@ def testPolicy(
             'Order': 'OUT',
             'Shares': 0
         }, index=[0])
-        order_book = pd.concat([new_order, order_book])
+        if order_book.empty:
+            order_book = new_order
+        else:
+            order_book = pd.concat([new_order, order_book])
 
     # Handle last day
     if position != 0 and not order_book.empty:
@@ -186,10 +188,11 @@ def run():
     _, t_in_order_book = testPolicy(symbol=symbol, sd=dt.datetime(2023, 1, 1), ed=dt.datetime(2024, 12, 31), return_order_book=True)
     _, t_out_order_book = testPolicy(symbol=symbol, sd=dt.datetime(2025, 1, 1), ed=dt.datetime(2025, 8, 1), return_order_book=True)
 
-    print(t_in_order_book)
-
     in_gini_portvalue, in_gini_cumulative_return = get_cumulative_return(t_in_order_book)
     out_gini_portvalue, out_gini_cumulative_return = get_cumulative_return(t_out_order_book)
+
+    print(f"In Sample Gini Cumulative Return: {in_gini_cumulative_return:.6f}, \n"
+          f"Out of Sample Gini Cumulative Return: {out_gini_cumulative_return:.6f}, \n")
 
     # plt.figure()
     # plt.title(f"In Sample Portfolio Value {symbol}")

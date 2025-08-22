@@ -17,7 +17,11 @@ def get_data(symbol, dates, colname="Close"):
     )
     df_temp.index.name = "Date"
 
+    df_temp = df_temp.ffill().bfill().dropna()
+
     df_temp = df_temp.rename(columns={colname: symbol})
     df = df.join(df_temp)
+
+    df = df.dropna()
 
     return df
